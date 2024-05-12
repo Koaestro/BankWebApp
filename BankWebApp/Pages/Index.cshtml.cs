@@ -79,10 +79,12 @@ namespace BankWebApp.Pages
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User);
+            
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
+                return Page();
+                // return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            } 
 
             await LoadAsync(user);
             return Page();
