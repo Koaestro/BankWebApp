@@ -32,11 +32,54 @@
                     @Html.DisplayFor(model => model.userModel.Name)
                 </dd>
                 <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.userModel.AccountNumber)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.userModel.AccountNumber)
+                </dd>
+                <dt class="col-sm-2">
                     @Html.DisplayNameFor(model => model.userModel.Balance)
                 </dt>
                 <dd class="col-sm-10">
                     @Html.DisplayFor(model => model.userModel.Balance)
                 </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.userModel.Transactions)
+                </dt>
+                <dd class="col-sm-10">
+                    <table class="table">
+                        <tr>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Item</th>
+                        </tr>
+                        @{
+                            Console.WriteLine("Just before foreach");
+                            Console.WriteLine(Model == null); // false
+                            Console.WriteLine(Model.userModel == null); // false
+                            Console.WriteLine(Model.userModel.Transactions == null); // true, so its the transactions thats null
+                            Console.WriteLine(Model.userModel);
+                        }
+                        @{
+                            if (Model.userModel.Transactions != null) {
+                        foreach (var item in Model.userModel.Transactions){
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Type)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Amount)
+                                </td>
+                                <td>
+                                    @if (item.Type == Enums.TransactionType.Debit)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.ItemName)
+                                    }
+                                </td>
+                            </tr> }}
+                        }
+                    </table>
+                </dd> 
             </dl>
         </div>
     } else

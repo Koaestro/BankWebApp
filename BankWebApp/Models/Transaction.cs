@@ -8,8 +8,6 @@ namespace BankWebApp.Models
     {
         public int ID { get; set; }
         [Required]
-        public int UserId { get; set; }
-        [Required]
         public decimal Amount { get; set; }
         [Required]
         public TransactionType Type { get; set; } // Type of the transaction (Credit or Debit)
@@ -17,6 +15,7 @@ namespace BankWebApp.Models
         [DataType(DataType.DateTime)]
         public DateTime Timestamp { get; set; }
 
+        public string? UserID { get; set; }
         public BankWebAppUser? User { get; set; }
 
         // Additional properties for purchases

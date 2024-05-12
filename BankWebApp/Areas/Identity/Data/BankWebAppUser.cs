@@ -19,7 +19,7 @@ public class BankWebAppUser : IdentityUser
     {
         get
         {
-            return(int.Parse(Id) * 11).ToString();
+            return Id;
         }
     }
     public decimal Balance { get; set; }

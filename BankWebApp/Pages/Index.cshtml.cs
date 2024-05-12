@@ -1,4 +1,5 @@
 ﻿using BankWebApp.Areas.Identity.Data;
+using BankWebApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,12 +12,16 @@ namespace BankWebApp.Pages
         private readonly UserManager<BankWebAppUser> _userManager;
         private readonly SignInManager<BankWebAppUser> _signInManager;
 
+        private readonly BankWebApp.Data.BankWebAppContext _context;
+
         public IndexModel(
             UserManager<BankWebAppUser> userManager,
-            SignInManager<BankWebAppUser> signInManager)
+            SignInManager<BankWebAppUser> signInManager,
+            Data.BankWebAppContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
         }
 
         /// <summary>
@@ -53,12 +58,18 @@ namespace BankWebApp.Pages
 
             [Required]
             [DataType(DataType.Text)]
-            [Display(Name = "Full name")]
+            [Display(Name = "Full Name")]
             public string Name { get; set; }
+
+            [DataType(DataType.Text)]
+            [Display(Name = "Account Number")]
+            public string AccountNumber { get; set; }
 
             [DataType(DataType.Currency)]
             [Display(Name = "Balance")]
             public decimal Balance { get; set; }
+
+            public ICollection<Transaction>? Transactions { get; set; }
 
         }
 
@@ -69,10 +80,15 @@ namespace BankWebApp.Pages
 
             Username = userName;
 
+            Console.WriteLine(user);
+            Console.WriteLine(user.Transactions);
+
             userModel = new UserModel
             {
                 Name = user.Name,
-                Balance = user.Balance
+                AccountNumber = user.AccountNumber,
+                Balance = user.Balance,
+                Transactions = user.Transactions
             };
         }
 
@@ -84,7 +100,11 @@ namespace BankWebApp.Pages
             {
                 return Page();
                 // return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            } 
+            }
+            // Explicitly load transactions for the user
+            await _context.Entry(user)
+                .Collection(u => u.Transactions)
+                .LoadAsync();
 
             await LoadAsync(user);
             return Page();
