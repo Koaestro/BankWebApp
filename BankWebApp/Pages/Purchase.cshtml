@@ -1,10 +1,22 @@
 ﻿@page
+@using BankWebApp.Areas.Identity.Data
+@using Microsoft.AspNetCore.Identity
 @model BankWebApp.Pages.PurchaseModel
 
 @{
     ViewData["Title"] = "Purchase";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
+
+@inject SignInManager<BankWebAppUser> SignInManager
+@inject UserManager<BankWebAppUser> UserManager
+
+
+@if (!SignInManager.IsSignedIn(User))
+{
+    Response.Redirect("./Identity/Account/Login");
+}
+
 
 <h1>Purchase</h1>
 

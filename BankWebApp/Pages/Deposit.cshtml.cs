@@ -27,6 +27,7 @@ namespace BankWebApp.Pages
 
         public IActionResult OnGet()
         {
+
         ViewData["UserID"] = new SelectList(_context.Users, "Id", "Id");
             return Page();
         }
